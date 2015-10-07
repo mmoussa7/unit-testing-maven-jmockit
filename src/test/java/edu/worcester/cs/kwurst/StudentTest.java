@@ -10,8 +10,7 @@ import mockit.FullVerifications;
 import mockit.Mocked;
 
 public class StudentTest {
-	@Mocked
-	Transcript transcript;
+	@Mocked Transcript transcript;
 	Student student;
 
 	@Before
@@ -21,7 +20,6 @@ public class StudentTest {
 	@Test
 	public void testGpa() {
 		new Expectations() {{
-			transcript = new Transcript();
 			transcript.getGpa(); returns(4.0);
 		}};
 		
@@ -32,27 +30,18 @@ public class StudentTest {
 	@Test
 	public void testCurrentEarnedCr() {
 		new Expectations() {{
-			transcript = new Transcript();
 			transcript.getCurrentEarnedCr(); returns(100);
 		}};
-		
 		student = new Student("Sue", "Storm");
-
 		assertEquals(100, student.getCurrentEarnedCr());
 	}
 	
 	@Test
 	public void testName() {
-		new Expectations() {{
-			transcript = new Transcript();
-		}};
-		
 		student = new Student("Sue", "Storm");
-
 		assertEquals("Sue", student.getFirstName());
 		assertEquals("Storm", student.getLastName());
 		student.setFirstName("Johnny");
 		assertEquals("Johnny", student.getFirstName());
 	}
-
 }
