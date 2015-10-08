@@ -8,6 +8,8 @@ import org.junit.Test;
 import mockit.Expectations;
 import mockit.FullVerifications;
 import mockit.Mocked;
+import mockit.Verifications;
+import mockit.VerificationsInOrder;
 
 public class StudentTest {
 	@Mocked Transcript transcript;
@@ -20,11 +22,26 @@ public class StudentTest {
 	@Test
 	public void testGpa() {
 		new Expectations() {{
+			new Transcript();
+			transcript.addCourse(
+					new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+					Transcript.Semester.FALL, 2015, new Grade("A"));
 			transcript.getGpa(); returns(4.0);
 		}};
 		
 		student = new Student("Sue", "Storm");
+		student.addCourse(
+				new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+				Transcript.Semester.FALL, 2015, new Grade("A"));
 		assertEquals(4.0, student.getGpa(), 0.0);
+	
+		new VerificationsInOrder() {{
+			new Transcript();
+			transcript.addCourse(
+					new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+					Transcript.Semester.FALL, 2015, new Grade("A"));
+			transcript.getGpa();
+		}};
 	}
 	
 	@Test
