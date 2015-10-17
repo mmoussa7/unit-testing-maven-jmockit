@@ -8,10 +8,11 @@ import org.junit.Test;
 import mockit.Expectations;
 import mockit.FullVerifications;
 import mockit.Mocked;
+import mockit.Verifications;
+import mockit.VerificationsInOrder;
 
 public class StudentTest {
-	@Mocked
-	Transcript transcript;
+	@Mocked Transcript transcript;
 	Student student;
 
 	@Before
@@ -21,38 +22,43 @@ public class StudentTest {
 	@Test
 	public void testGpa() {
 		new Expectations() {{
-			transcript = new Transcript();
+			new Transcript();
+			transcript.addCourse(
+					new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+					Transcript.Semester.FALL, 2015, new Grade("A"));
 			transcript.getGpa(); returns(4.0);
 		}};
 		
 		student = new Student("Sue", "Storm");
+		student.addCourse(
+				new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+				Transcript.Semester.FALL, 2015, new Grade("A"));
 		assertEquals(4.0, student.getGpa(), 0.0);
+	
+		new VerificationsInOrder() {{
+			new Transcript();
+			transcript.addCourse(
+					new Course("CS", 443, "Software Quality Assurance and Testing", 3), 
+					Transcript.Semester.FALL, 2015, new Grade("A"));
+			transcript.getGpa();
+		}};
 	}
 	
 	@Test
 	public void testCurrentEarnedCr() {
 		new Expectations() {{
-			transcript = new Transcript();
 			transcript.getCurrentEarnedCr(); returns(100);
 		}};
-		
 		student = new Student("Sue", "Storm");
-
 		assertEquals(100, student.getCurrentEarnedCr());
 	}
 	
 	@Test
 	public void testName() {
-		new Expectations() {{
-			transcript = new Transcript();
-		}};
-		
 		student = new Student("Sue", "Storm");
-
 		assertEquals("Sue", student.getFirstName());
 		assertEquals("Storm", student.getLastName());
 		student.setFirstName("Johnny");
 		assertEquals("Johnny", student.getFirstName());
 	}
-
 }
